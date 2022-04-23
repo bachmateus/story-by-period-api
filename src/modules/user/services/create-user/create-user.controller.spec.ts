@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Request, Response } from 'express';
 
 import User from '../../model/user.entity';
 import LocalUserRepository from '../../repositories/implementarions/LocalUserRepository';
 import { CreateUserController } from './create-user.controller';
-import { CreateUserService } from './_old_create-user.service';
+import CreateUserService from './create-user.service';
 
 describe('CreateUserController', () => {
   let controller: CreateUserController;
@@ -14,11 +15,12 @@ describe('CreateUserController', () => {
       providers: [
         User,
         CreateUserService,
-        { provide: "IUserRepository", useClass: LocalUserRepository}
+        { provide: "USER_REPOSITORY", useClass: LocalUserRepository}
       ]
     }).compile();
 
     controller = module.get<CreateUserController>(CreateUserController);
+
   });
 
   it('should be defined', () => {
@@ -26,49 +28,136 @@ describe('CreateUserController', () => {
   });
 
   it('should create a new user', async() => {
-    const userCreated = await controller.handle({
-      name: 'Test', email: 'test@test.com'
-    });
+    let responseObj = {};
+    const response: Partial<Response> = {
+      status: jest.fn().mockImplementation(() => response),
+      json: jest.fn().mockImplementation( result => {
+        responseObj = result
+        return result
+      })
+    }
+    const request = {
+      body: {
+          name: 'Test', email: 'test@test.com'
+        }
+    }
 
-    expect(userCreated).toHaveProperty('id');
+    const resp = await controller.handle(
+      request as Request, response as Response
+    );
+    expect(resp).toHaveProperty('id');
   });
-
   it('should not create a new user if the name is missing', async () => {
-    try {
-      await controller.handle({
-        name: '', email: 'teste@email.com'
-      });
-
-      throw new Error("User was registered");
-
-    } catch (error) {
-      expect(error.message).not.toEqual('User was registered') 
+    let responseObj = {error:""};
+    let statusCode = 0;
+    const response: Partial<Response> = {
+      status: jest.fn().mockImplementation((status) => {
+        statusCode = status
+        return response
+      }),
+      json: jest.fn().mockImplementation( result => {
+        responseObj = result
+      })
     }
+    const request = {
+      body: {
+          name: '', email: 'test@test.com'
+        }
+    }
+
+    await controller.handle(
+      request as Request, response as Response
+    );
+
+    expect(statusCode).toEqual(400);
+    expect(responseObj.error).toEqual("Name must be informated")
   });
 
-  it('should not create a new user if the email is missing', async () => {
-    try {
-      await controller.handle({
-        name: 'teste name', email: ''
-      });
-
-      throw new Error("User was registered");
-
-    } catch (error) {
-      expect(error.message).not.toEqual('User was registered') 
+  it('should not create a new user if the email and phone is missing', async () => {
+    let responseObj = {error:""};
+    let statusCode = 0;
+    const response: Partial<Response> = {
+      status: jest.fn().mockImplementation((status) => {
+        statusCode = status
+        return response
+      }),
+      json: jest.fn().mockImplementation( result => {
+        responseObj = result
+      })
     }
+    const request = {
+      body: {
+          name: 'test', email: '', phone: ''
+        }
+    }
+
+    await controller.handle(
+      request as Request, response as Response
+    );
+
+    expect(statusCode).toEqual(400);
+    expect(responseObj.error).toEqual("E-mail or phone number must be informated")
   })
 
   it('should not create new user with the same email', async () => {
-    try {
-      await controller.handle({
-        name: 'teste name', email: 'test@email.com'
-      });
-
-      throw new Error("User was registered");
-
-    } catch (error) {
-      expect(error.message).not.toEqual('User was registered') 
+    let responseObj = {error:""};
+    let statusCode = 0;
+    
+    const response: Partial<Response> = {
+      status: jest.fn().mockImplementation((status) => {
+        statusCode = status
+        return response
+      }),
+      json: jest.fn().mockImplementation( result => {
+        responseObj = result
+      })
     }
+    const request = {
+      body: {
+          name: 'test', email: 'test@email.com', phone: ''
+        }
+    }
+
+    await controller.handle(
+      request as Request, response as Response
+    );
+    
+    await controller.handle(
+      request as Request, response as Response
+    );
+
+    expect(statusCode).toEqual(400);
+    expect(responseObj.error).toEqual("This E-mail is already being used")
+  });
+
+  it('should not create new user with the same phone', async () => {
+    let responseObj = {error:''};
+    let statusCode = 0;
+    
+    const response: Partial<Response> = {
+      status: jest.fn().mockImplementation((status) => {
+        statusCode = status
+        return response
+      }),
+      json: jest.fn().mockImplementation( result => {
+        responseObj = result
+      })
+    }
+    const request = {
+      body: {
+          name: 'test', email: '', phone: '11999944445'
+        }
+    }
+
+    await controller.handle(
+      request as Request, response as Response
+    );
+    
+    await controller.handle(
+      request as Request, response as Response
+    );
+
+    expect(statusCode).toEqual(400);
+    expect(responseObj.error).toEqual("This phone is already being used")
   });
 });

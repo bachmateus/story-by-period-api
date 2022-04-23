@@ -4,12 +4,15 @@ import IUserRepository from "../IUserRepository";
 
 @Injectable()
 export default class LocalUserRepository implements IUserRepository {
-  private users: User[] = [
-    { id:'random', name: 'tester', email: 'test@email.com'}
-  ]
-  create(user: User): Promise<User> {
+  
+  private users: User[] = [];
+  
+  create(user: User): Promise<number> {
+    this.users.push(user);
+
+
     return new Promise((resolve)=>{
-      resolve(user);
+      resolve(Math.random() * (1000000000 - 1) + 1);
     });
   }
   update(user: User): Promise<User> {
@@ -23,9 +26,15 @@ export default class LocalUserRepository implements IUserRepository {
     const response =  (foundUser.length === 0) ? null: foundUser[0];
     
     return new Promise(resolve => resolve(response));
-    // throw new Error("Method not implemented.");
   }
   delete(id: string): Promise<boolean> {
     throw new Error("Method not implemented.");
+  }
+
+  getByPhone(phone: string): Promise<User> {
+    const foundUser = this.users.filter( user => user.phone === phone); 
+    const response =  (foundUser.length === 0) ? null: foundUser[0];
+    
+    return new Promise(resolve => resolve(response));
   }
 }

@@ -1,12 +1,7 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import User from '../../model/user.entity';
-import CreateUserService from './create-user.service';
-// import { CreateUserService } from './_old_create-user.service';
+import { Controller, Post, Req, Res } from '@nestjs/common';
+import { Request, Response } from 'express';
 
-interface IRequest {
-  name: string
-  email:string
-}
+import CreateUserService from './create-user.service';
 
 @Controller('create-user')
 export class CreateUserController {
@@ -15,21 +10,21 @@ export class CreateUserController {
   ){}
   
   @Post()
-  async handle(@Body() { name, email }: IRequest) {
-    return await this.createUserService.execute()
-    // try {
-      
-    //   const user = new User();
+  async handle(
+    @Req() request: Request,
+    @Res() response: Response
+  ) {
+    try {
+      const { name, email, phone, photo } = request.body;
   
-    //   Object.assign(user, {
-    //     name, email
-    //   });
+      const createdUser = await this.createUserService.execute({
+        name, email, phone, photo
+      })
   
-    //   const createdUser = await this.createUserService.execute(user);
-
-    //   return createdUser;
-    // } catch (e) {
-    //   throw e;
-    // }
+      return response.status(201).json(createdUser);
+    } catch (e) { 
+      console.log(e.message)
+      return response.status(400).json({error: e.message})
+    }
   }
 }
