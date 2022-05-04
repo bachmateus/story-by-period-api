@@ -23,7 +23,6 @@ export class CreateUserController {
   
       return response.status(201).json(createdUser);
     } catch (e) { 
-      console.log(e.message)
       return response.status(400).json({error: e.message})
     }
   }
