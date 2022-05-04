@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export default class BookCategory {
@@ -10,4 +10,13 @@ export default class BookCategory {
   
   @Column()
   description?: string
+
+  @DeleteDateColumn()
+  deleted_at: Date
+  
+  @CreateDateColumn()
+  created_at: Date
+      
+  @UpdateDateColumn()
+  updated_at: Date
 }
