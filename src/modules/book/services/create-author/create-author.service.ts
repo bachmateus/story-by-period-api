@@ -1,8 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
 import User from "src/modules/user/model/user.entity";
-import IUserRepository from "../../user/repositories/IUserRepository";
-import Author from "../model/author.entity";
-import IAuthorRepository from "../repositories/IAuthorRepository";
+import IUserRepository from "../../../user/repositories/IUserRepository";
+import Author from "../../model/author.entity";
+import IAuthorRepository from "../../repositories/IAuthorRepository";
 
 interface IRequest {
   user: User 

@@ -1,12 +1,12 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { ConfigModule } from "@nestjs/config";
 import { Request, Response } from "express";
-import LocalUserRepository from "../../user/repositories/implementarions/LocalUserRepository";
-import Author from "../model/author.entity";
-import LocalAuthorRepository from "../repositories/implementations/LocalAuthorRepository";
+import LocalUserRepository from "../../../user/repositories/implementarions/LocalUserRepository";
+import Author from "../../model/author.entity";
+import LocalAuthorRepository from "../../repositories/implementations/LocalAuthorRepository";
 import { CreateAuthorController } from "./create-author.controller";
 import CreateAuthorService from "./create-author.service";
-import User from "src/modules/user/model/user.entity";
+import User from "../../../user/model/user.entity";
 
 let statusCode = 0;
 
