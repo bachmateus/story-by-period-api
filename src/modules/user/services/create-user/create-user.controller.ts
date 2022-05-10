@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 
 import CreateUserService from './create-user.service';
 
-@Controller('create-user')
+@Controller('users')
 export class CreateUserController {
   constructor(
     private createUserService: CreateUserService

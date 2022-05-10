@@ -21,11 +21,13 @@ export default class MySQLUserRepository implements IUserRepository {
     console.log(user);
     return user;
   }
-  getByEmail(email: string): Promise<User> {
-    throw new Error("Method not implemented.");
+  async getByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findOneBy({email});
+    return user;
   }
-  getByPhone(email: string): Promise<User> {
-    throw new Error("Method not implemented.");
+  async getByPhone(phone: string): Promise<User> {
+    const user = await this.userRepository.findOneBy({phone});
+    return user;
   }
   delete(id: string): Promise<boolean> {
     throw new Error("Method not implemented.");
