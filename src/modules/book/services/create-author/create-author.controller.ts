@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import CreateAuthorService from "./create-author.service";
 
 
-@Controller('create-author')
+@Controller('authors')
 export class CreateAuthorController {
   constructor(
     private createAuthorService: CreateAuthorService
