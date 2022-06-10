@@ -1,6 +1,6 @@
 import BookCategory from "../model/bookCategory.entity";
 
-export default interface ICategoryRepository {
+export default interface IBookCategoryRepository {
   create(bookCategory:BookCategory): Promise<number>
   update(bookCategory:BookCategory): Promise<boolean>
   delete(categoryId:number)
