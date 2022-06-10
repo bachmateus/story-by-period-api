@@ -26,6 +26,9 @@ export default class User {
   @Column()
   isActivated: boolean
 
+  @Column()
+  isAdmin?: boolean = false
+
   @CreateDateColumn()
   created_at?: Date;
       

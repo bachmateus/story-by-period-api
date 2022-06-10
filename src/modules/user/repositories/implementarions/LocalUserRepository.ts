@@ -6,7 +6,8 @@ import IUserRepository from "../IUserRepository";
 export default class LocalUserRepository implements IUserRepository {
   
   private users: User[] = [
-    {id:1, name: 'Tester', email: 'tester@test.com', isActivated: true }
+    {id:1, name: 'TesterAdmin', email: 'tester@admin.com', isActivated: true, isAdmin: true },
+    {id:1, name: 'Tester', email: 'tester@test.com', isActivated: true, isAdmin: false }
   ];
   
   create(user: User): Promise<number> {
@@ -42,4 +43,9 @@ export default class LocalUserRepository implements IUserRepository {
     
     return new Promise(resolve => resolve(response));
   }
+
+  listAll(): Promise<User[]> {
+    return new Promise( resolve => resolve(this.users));
+  }
+  
 }

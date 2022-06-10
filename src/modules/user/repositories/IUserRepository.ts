@@ -7,4 +7,5 @@ export default interface IUserRepository {
   getByEmail(email:string): Promise<User>
   getByPhone(email:string): Promise<User>
   delete(id:string): Promise<boolean>
+  listAll(): Promise<User[]>
 }

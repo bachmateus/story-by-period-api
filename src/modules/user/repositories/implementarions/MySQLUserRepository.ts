@@ -1,5 +1,5 @@
 import { Inject } from "@nestjs/common";
-import { InsertResult, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import User from "../../model/user.entity";
 import IUserRepository from "../IUserRepository";
 
@@ -8,12 +8,12 @@ export default class MySQLUserRepository implements IUserRepository {
     @Inject('MYSQL_USER_REPOSITORY')
     private userRepository: Repository<User>
   ){}
-
+  
   async create(user: User): Promise<number> {
     const response = await this.userRepository.insert(user);
     return response.raw.insertId;
   }
-  update(user: User): Promise<User> {
+  async update(user: User): Promise<User> {
     throw new Error("Method not implemented.");
   }
   async getById(id: number): Promise<User> {
@@ -29,8 +29,14 @@ export default class MySQLUserRepository implements IUserRepository {
     const user = await this.userRepository.findOneBy({phone});
     return user;
   }
-  delete(id: string): Promise<boolean> {
-    throw new Error("Method not implemented.");
+  async delete(id: string): Promise<boolean> {
+    const response = await this.userRepository.softDelete(id);
+    return true;
+  }
+  
+  async listAll(): Promise<User[]> {
+    const users = await this.userRepository.find();
+    return users; 
   }
 
 }

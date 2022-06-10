@@ -1,15 +1,16 @@
 import { Inject, Injectable } from "@nestjs/common";
+import User from "../../model/user.entity";
 import IUserRepository from "../../repositories/IUserRepository";
 
 
 @Injectable()
-export default class ListAllUsers {
+export default class ListAllUsersService {
   constructor(
-    @Inject()
+    @Inject('USER_REPOSITORY')
     private userRepository: IUserRepository
   ){}
 
-  execute() {
-    
+  async execute(): Promise<User[]> {
+    return await this.userRepository.listAll();
   }
 }
