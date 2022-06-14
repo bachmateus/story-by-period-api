@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import BookCategory from "../../model/bookCategory.entity";
-import bookCategoryEntity from "../../model/bookCategory.entity";
-import IBookCategoryRepository from "../IBookCategoryRepository";
+
+import BookCategory from "../../../bookCategory/model/bookCategory.entity";
+import bookCategoryEntity from "../../../bookCategory/model/bookCategory.entity";
+import IBookCategoryRepository from "../../../bookCategory/repositories/IBookCategoryRepository";
 
 @Injectable()
 export default class LocalBookCategoryRepository implements IBookCategoryRepository {

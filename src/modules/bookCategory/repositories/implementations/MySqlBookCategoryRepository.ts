@@ -7,7 +7,7 @@ import IBookCategoryRepository from "../IBookCategoryRepository";
 
 export default class MySqlBookCategoryRepository implements IBookCategoryRepository {
   constructor(
-    @Inject('MYSQL_BOOK_CATEGORY_REPOSITORY') 
+    @Inject('BOOK_CATEGORY_REPOSITORY') 
     private bookCategoryRepository: Repository<BookCategory>
   ){}
 

@@ -12,7 +12,7 @@ import {
 
 import Author from './author.entity';
 import BookBeginRule from "./bookBeginRule.entity"
-import BookCategory from "./bookCategory.entity";
+import BookCategory from "../../bookCategory/model/bookCategory.entity";
 
 @Entity()
 export default class Book {
